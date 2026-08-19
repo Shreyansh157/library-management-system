@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Transactions - Library Management System</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <nav class="navbar dashboard-navbar">
+      <div class="container">
+        <a href="/dashboard.html" class="navbar-brand">
+          <i class="bi bi-book-half"></i>
+          <span>Library Management System</span>
+        </a>
+
+        <a href="/dashboard.html" class="btn logout-btn">
+          <i class="bi bi-grid-1x2"></i>
+          Dashboard
+        </a>
+      </div>
+    </nav>
+
+    <main class="container page-container">
+      <div class="container page-container py-0">
+        <div class="page-header">
+          <div>
+            <h2>
+              <i class="bi bi-arrow-repeat"></i>
+              Issue & Return
+            </h2>
+
+            <p>Manage book issue and return transactions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Issue Book -->
+
+      <section class="transaction-section">
+        <div class="section-heading">
+          <div class="section-heading-icon">
+            <i class="bi bi-bookmark-plus"></i>
+          </div>
+
+          <div>
+            <h4>Issue a Book</h4>
+
+            <p>Select a member and an available book to create a transaction.</p>
+          </div>
+        </div>
+
+        <form id="issueForm">
+          <div class="row g-4">
+            <!-- Member -->
+
+            <div class="col-md-5">
+              <label for="memberSearch" class="transaction-label"> Member </label>
+
+              <div class="position-relative">
+                <i class="bi bi-search search-field-icon"></i>
+
+                <input
+                  type="text"
+                  id="memberSearch"
+                  class="form-control transaction-search"
+                  placeholder="Search by ID, name or address..."
+                  autocomplete="off"
+                  required
+                />
+
+                <input type="hidden" id="memberSelect" />
+
+                <div id="memberResults" class="list-group position-absolute w-100 shadow-sm" style="z-index: 1000"></div>
+              </div>
+            </div>
+
+            <!-- Book -->
+
+            <div class="col-md-5">
+              <label for="bookSearch" class="transaction-label"> Book </label>
+
+              <div class="position-relative">
+                <i class="bi bi-search search-field-icon"></i>
+
+                <input
+                  type="text"
+                  id="bookSearch"
+                  class="form-control transaction-search"
+                  placeholder="Search by ID, title, author or category..."
+                  autocomplete="off"
+                  required
+                />
+
+                <input type="hidden" id="bookSelect" />
+
+                <div id="bookResults" class="list-group position-absolute w-100 shadow-sm" style="z-index: 1000"></div>
+              </div>
+            </div>
+
+            <!-- Issue button -->
+
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn issue-btn w-100">
+                <i class="bi bi-arrow-up-right-circle"></i>
+                Issue Book
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Currently Issued Books -->
+
+      <section class="transaction-section">
+        <div class="section-title-row">
+          <div>
+            <h4>Currently Issued Books</h4>
+
+            <p>Books that are currently issued to members.</p>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="table-responsive">
+            <table class="table books-table mb-0">
+              <thead>
+                <tr>
+                  <th>Transaction</th>
+                  <th>Member</th>
+                  <th>Book</th>
+                  <th>Issue Date</th>
+                  <th class="text-end">Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="issuedTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transaction History -->
+
+      <section class="transaction-section">
+        <div class="section-title-row">
+          <div>
+            <h4>Transaction History</h4>
+
+            <p>Complete record of book issue and return activity.</p>
+          </div>
+        </div>
+
+        <div class="data-card">
+          <div class="table-responsive">
+            <table class="table books-table mb-0">
+              <thead>
+                <tr>
+                  <th>Transaction</th>
+                  <th>Member</th>
+                  <th>Book</th>
+                  <th>Issue Date</th>
+                  <th>Return Date</th>
+                  <th>Fine</th>
+                </tr>
+              </thead>
+
+              <tbody id="historyTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content message-modal">
+          <div class="modal-body text-center">
+            <div id="messageModalIcon" class="message-modal-icon">
+              <i class="bi bi-check-lg"></i>
+            </div>
+
+            <h5 id="messageModalTitle" class="message-modal-title">Success</h5>
+
+            <p id="messageModalText" class="message-modal-text">Operation completed successfully.</p>
+
+            <button type="button" class="btn message-modal-btn" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content message-modal">
+          <div class="modal-body text-center">
+            <div class="message-modal-icon delete-confirm-icon">
+              <i class="bi bi-arrow-return-left"></i>
+            </div>
+
+            <h5 class="message-modal-title">Confirm Return</h5>
+
+            <p id="confirmModalText" class="message-modal-text">Are you sure you want to return this book?</p>
+
+            <div class="d-flex justify-content-center gap-2">
+              <button type="button" class="btn modal-cancel-btn" data-bs-dismiss="modal">Cancel</button>
+
+              <button type="button" id="confirmReturnBtn" class="btn return-confirm-btn">Return Book</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="js/auth.js"></script>
+    <script src="js/transactions.js"></script>
+  </body>
+</html>

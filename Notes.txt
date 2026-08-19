@@ -1,0 +1,4 @@
+Fixes needs to be done:
+- deleted book id number is still reserved after deletion 
+- id increment in members is skipping digits
+- a dropdown for memeber and books in transaction page is impractical for large number of books, add maybe a search instead
